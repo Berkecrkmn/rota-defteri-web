@@ -57,7 +57,7 @@ src/
 Form teslimi için ek görüntüler:
 
 - `screenshots/form/01_ana_ekran_listeleme.png`
-- `screenshots/form/02_arama_balat_sonucu.png`
-- `screenshots/form/03_kategori_filtresi_sahil.png`
-- `screenshots/form/04_yeni_rota_ekleme.png`
-- `screenshots/form/05_rota_guncelleme.png`
+- `screenshots/form/02_yeni_rota_modal.png`
+- `screenshots/form/03_yeni_rota_ekleme_sonucu.png`
+- `screenshots/form/04_arama_balat_sonucu.png`
+- `screenshots/form/05_rota_guncelleme_modal.png`

@@ -38,6 +38,7 @@ export function RoutePlannerPage() {
   const [routes, setRoutes] = useState<TravelRoute[]>(() => loadRoutes())
   const [draft, setDraft] = useState<RouteDraft>(emptyDraft)
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [isFormOpen, setIsFormOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState<RouteCategory | 'Tümü'>('Tümü')
 
@@ -63,21 +64,32 @@ export function RoutePlannerPage() {
       ? '0.0'
       : (routes.reduce((sum, route) => sum + route.distance, 0) / routes.length).toFixed(1)
 
+  const closeForm = () => {
+    setIsFormOpen(false)
+    setEditingId(null)
+    setDraft(emptyDraft)
+  }
+
+  const openCreateRoute = () => {
+    setEditingId(null)
+    setDraft(emptyDraft)
+    setIsFormOpen(true)
+  }
+
   const submitRoute = () => {
     if (editingId) {
       setRoutes((items) =>
         items.map((route) => (route.id === editingId ? { ...draft, id: editingId } : route)),
       )
-      setEditingId(null)
     } else {
       setRoutes((items) => [{ ...draft, id: createId(draft.title) }, ...items])
     }
 
-    setDraft(emptyDraft)
+    closeForm()
   }
 
   const editRoute = (route: TravelRoute) => {
-    const rest: RouteDraft = {
+    setDraft({
       title: route.title,
       district: route.district,
       category: route.category,
@@ -87,25 +99,21 @@ export function RoutePlannerPage() {
       bestTime: route.bestTime,
       notes: route.notes,
       color: route.color,
-    }
-
+    })
     setEditingId(route.id)
-    setDraft(rest)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    setIsFormOpen(true)
   }
 
   const deleteRoute = (id: string) => {
     setRoutes((items) => items.filter((route) => route.id !== id))
     if (editingId === id) {
-      setEditingId(null)
-      setDraft(emptyDraft)
+      closeForm()
     }
   }
 
   const resetRoutes = () => {
     setRoutes(seedRoutes)
-    setEditingId(null)
-    setDraft(emptyDraft)
+    closeForm()
     setQuery('')
     setCategory('Tümü')
   }
@@ -113,7 +121,7 @@ export function RoutePlannerPage() {
   return (
     <main className="app-shell">
       <section className="workspace">
-        <aside className="side-panel">
+        <section className="hero-panel">
           <div className="brand-mark">
             <span />
             <div>
@@ -122,25 +130,24 @@ export function RoutePlannerPage() {
             </div>
           </div>
 
-          <div className="featured-route">
-            <RouteMap color="#B65335" stopCount={5} />
+          <div className="hero-copy">
             <div>
-              <p className="eyebrow">Bugünün planı</p>
-              <h2>Kısa şehir kaçamaklarını düzenle.</h2>
+              <p className="eyebrow">Rota arşivi</p>
+              <h2>İstanbul için kısa şehir kaçamaklarını düzenle.</h2>
+              <p>
+                Yarım günlük gezi fikirlerini kaydet, filtrele, düzenle ve kendi rota
+                defterini hızlıca güncel tut.
+              </p>
             </div>
+            <button className="primary-button hero-action" type="button" onClick={openCreateRoute}>
+              Yeni rota
+            </button>
           </div>
 
-          <RouteForm
-            draft={draft}
-            isEditing={Boolean(editingId)}
-            onCancel={() => {
-              setEditingId(null)
-              setDraft(emptyDraft)
-            }}
-            onChange={setDraft}
-            onSubmit={submitRoute}
-          />
-        </aside>
+          <div className="hero-map-card">
+            <RouteMap color="#B65335" stopCount={5} />
+          </div>
+        </section>
 
         <section className="content-panel">
           <div className="toolbar">
@@ -148,9 +155,14 @@ export function RoutePlannerPage() {
               <p className="eyebrow">Rota arşivi</p>
               <h2>Kayıtlı gezi planları</h2>
             </div>
-            <button className="ghost-button compact" type="button" onClick={resetRoutes}>
-              Sıfırla
-            </button>
+            <div className="toolbar-actions">
+              <button className="ghost-button compact" type="button" onClick={resetRoutes}>
+                Sıfırla
+              </button>
+              <button className="primary-button compact" type="button" onClick={openCreateRoute}>
+                Yeni rota
+              </button>
+            </div>
           </div>
 
           <StatStrip
@@ -208,6 +220,37 @@ export function RoutePlannerPage() {
             </div>
           )}
         </section>
+
+        {isFormOpen && (
+          <div
+            aria-modal="true"
+            className="modal-layer"
+            role="dialog"
+            onMouseDown={(event) => {
+              if (event.target === event.currentTarget) {
+                closeForm()
+              }
+            }}
+          >
+            <div className="modal-card">
+              <button
+                aria-label="Pencereyi kapat"
+                className="modal-close"
+                type="button"
+                onClick={closeForm}
+              >
+                ×
+              </button>
+              <RouteForm
+                draft={draft}
+                isEditing={Boolean(editingId)}
+                onCancel={closeForm}
+                onChange={setDraft}
+                onSubmit={submitRoute}
+              />
+            </div>
+          </div>
+        )}
       </section>
     </main>
   )

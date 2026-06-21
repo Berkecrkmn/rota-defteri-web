@@ -27,11 +27,6 @@ export function RouteForm({ draft, isEditing, onChange, onCancel, onSubmit }: Ro
           <p className="eyebrow">Rota kaydı</p>
           <h2>{isEditing ? 'Rotayı düzenle' : 'Yeni rota ekle'}</h2>
         </div>
-        {isEditing && (
-          <button className="ghost-button compact" type="button" onClick={onCancel}>
-            Vazgeç
-          </button>
-        )}
       </div>
 
       <label>
@@ -141,9 +136,14 @@ export function RouteForm({ draft, isEditing, onChange, onCancel, onSubmit }: Ro
         </div>
       </fieldset>
 
-      <button className="primary-button" type="submit">
-        {isEditing ? 'Güncelle' : 'Ekle'}
-      </button>
+      <div className="form-actions">
+        <button className="ghost-button" type="button" onClick={onCancel}>
+          Vazgeç
+        </button>
+        <button className="primary-button" type="submit">
+          {isEditing ? 'Güncelle' : 'Ekle'}
+        </button>
+      </div>
     </form>
   )
 }
