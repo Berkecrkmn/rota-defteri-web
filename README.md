@@ -33,6 +33,12 @@ pnpm dev
 pnpm build
 ```
 
+## Linkler
+
+- GitHub: https://github.com/Berkecrkmn/rota-defteri-web
+- Netlify: https://adorable-genie-d5a98c.netlify.app
+- GitHub Pages: https://berkecrkmn.github.io/rota-defteri-web/
+
 ## Proje Yapısı
 
 ```text
