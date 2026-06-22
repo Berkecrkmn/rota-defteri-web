@@ -37,7 +37,6 @@ pnpm build
 
 - GitHub: https://github.com/Berkecrkmn/rota-defteri-web
 - Netlify: https://rota-defteri-web-berke.netlify.app
-- GitHub Pages: https://berkecrkmn.github.io/rota-defteri-web/
 
 ## Proje Yapısı
 
